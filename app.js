@@ -69,7 +69,8 @@ Ext.syncRequire([
     'Onc.view.tabs.StorageTab',
     'Onc.view.tabs.TemplatesTab',
     'Onc.view.tabs.ShellTab',
-    'Onc.view.tabs.VncTab'
+    'Onc.view.tabs.VncTab',
+    'Onc.view.tabs.DashboardTab'
 ]);
 
 if (ENABLE_VMMAP == true) {

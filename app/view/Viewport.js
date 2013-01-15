@@ -81,6 +81,11 @@ Ext.define('Onc.view.Viewport', {
             closable: true,
         },
         items: [{
+        	title: "Dashboard",
+        	iconCls: 'icon-dashboard',
+        	closable: false,
+        	xtype: 'computedashboardtab'
+        },{
             title: "OMS Shell",
             iconCls: 'icon-shell',
             closable: false,
