@@ -21,7 +21,7 @@ Ext.define('Onc.controller.MigrateController', {
     migrate : function(options) {
         var myMask = new Ext.LoadMask(options.vmmap, {msg:"Migrating. Please wait..."});
         myMask.show();
-        var url = '/computes/{0}/actions/migrate?arg=/machines/{1}'.format(options.computeId, options.machineId);
+        var url = '/computes/{0}/actions/migrate?arg=/machines/{1}&asynchronous=1'.format(options.computeId, options.machineId);
         Onc.core.Backend.request('PUT', url, {
             success: function(response) {
                 var ret = Ext.JSON.decode(response.responseText);
