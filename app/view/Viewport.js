@@ -126,13 +126,6 @@ Ext.define('Onc.view.Viewport', {
             closable: false,
             xtype: 'computedashboardtab',
             itemId: 'dashboard'
-        }, {
-            itemId: 'oms-shell',
-            title: "OMS Shell",
-            iconCls: 'icon-shell',
-            closable: false,
-            xtype: 'shell',
-            url: Onc.core.Backend.url('/bin/omsh/webterm')
         }].concat(!ENABLE_VMMAP ? [] : [{
             itemId: 'vmmap',
             title: "VM Map",
