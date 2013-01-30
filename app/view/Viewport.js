@@ -15,7 +15,7 @@ Ext.define('Onc.view.Viewport', {
     _adjustViewToGroups: function() {
         var isAdmin = Onc.model.AuthenticatedUser.isAdmin();
         var adminButtons = ['infrastructurejoin-button', 'tasks-button', 'oms-shell-button'];
-        var adminTabs = ['vmmap', 'oms-shell'];
+        var adminTabs = ['vmmap'];
         // adjust controll buttons
         for (var i = 0; i < adminButtons.length; i++) {
             this.down('#' + adminButtons[i]).hidden = !isAdmin;
