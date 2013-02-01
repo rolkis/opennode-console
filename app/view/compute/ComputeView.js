@@ -12,7 +12,7 @@ Ext.define('Onc.view.compute.ComputeView', {
         var tab = {
                 title: title,
                 xtype: 'compute{0}tab'.format(type),
-                itemId: '{0}tab'.format(type),
+                itemId: '{0}tab'.format(type)
             };
         if (type === 'shell') {
             tab['shellConfig'] = {
@@ -46,28 +46,33 @@ Ext.define('Onc.view.compute.ComputeView', {
 
     updateTabs: function() {
         var me = this;
-        var rec = this.record;
-        me._adjustTab('System', 'system', true);
+        if (this.record) {
+            var rec = this.record;
+            me._adjustTab('System', 'system', true);
 
-        var isHn = rec.getChild('vms');
-        me._adjustTab('VMs', 'vmlist', isHn);
-        me._adjustTab('Network', 'network', isHn);
-        me._adjustTab('Templates', 'templates', isHn);
+            var isHn = rec.getChild('vms');
+            me._adjustTab('VMs', 'vmlist', isHn);
+            me._adjustTab('Network', 'network', isHn);
+            me._adjustTab('Templates', 'templates', isHn);
 
-        var isActive = rec.data['state'] === 'active';
-        me._adjustTab('Shell', 'shell', isActive);
-        me._adjustTab('VNC', 'vnc', isActive && ENABLE_VNC);
+            var isActive = rec.data['state'] === 'active';
+            me._adjustTab('Shell', 'shell', isActive);
+            me._adjustTab('VNC', 'vnc', isActive && ENABLE_VNC);
+        }
         return true;
     },
 
-    initComponent: function() {
-        var rec = this.record;
+    setRecord: function(compute) {
+        console.log(compute.id);
+        this.record = compute;
 
-        this.title = rec.get('hostname');
+        var rec = this.record;
+        console.log(rec.id);
+        this.title = 'a';
         this.tabConfig = {
             tooltip: (rec.get('hostname') + '<br/>' +
-                      rec.get('ipv4_address') + '<br/>' +
-                      rec.get('type'))
+                rec.get('ipv4_address') + '<br/>' +
+                rec.get('type'))
         };
 
         this.items = [{
@@ -80,9 +85,17 @@ Ext.define('Onc.view.compute.ComputeView', {
             defaults: {record: rec},
             items: [],
             plain: true,
-            bodyStyle: 'background: inherit',
+            bodyStyle: 'background: inherit'
         }];
+        this.doLayout();
+    },
 
+    initComponent: function() {
+        var rec = null;
+        this.title = 'Loading...';
+        this.items = [];
+        console.log('calling parents');
+        console.log(arguments);
         this.callParent(arguments);
     }
 });

@@ -12,20 +12,25 @@ Ext.define('Onc.controller.MainController', {
         var tabPanel = this.getTabs();
         var tab = tabPanel.child('computeview[computeId=' + computeId + ']');
         if (!tab) {
-            var searchLoadingMask = new Ext.LoadMask(Ext.getCmp('search-results'), {msg:'Loading. Please wait...'});
-            var vmmapLoadingMask = new Ext.LoadMask(Ext.getCmp('vmmap'), {msg:'Loading. Please wait...'});
-            searchLoadingMask.show();
-            vmmapLoadingMask.show();
+            tab = Ext.widget('computeview', {
+                record: null,
+                computeId: computeId
+            });
+            tabPanel.add(tab);
+            tabPanel.setActiveTab(tab);
+            console.log('tab added');
             this.getStore('ComputesStore').loadById(computeId,
                 function(compute) {
-                    tab = Ext.widget('computeview', {
+                    console.log('compute callback');
+                    tab.setRecord(compute);
+                    tab.Reload();
+                    //tabPanel.setActiveTab(tab);
+                    /*tab1 = Ext.widget('computeview', {
                         record: compute,
                         computeId: computeId
                     });
-                    tabPanel.add(tab);
-                    tabPanel.setActiveTab(tab);
-                    searchLoadingMask.hide();
-                    vmmapLoadingMask.hide();
+                    /*tabPanel.add(tab1);
+                    */
                 },
                 function(error) {
                     // TODO: visual display of the error
