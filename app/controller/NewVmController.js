@@ -47,7 +47,9 @@ Ext.define('Onc.controller.NewVmController', {
                                 if (!ret['success']) {
                                     form.markInvalid(ret['errors']);
                                 } else {
+                                    // poll the status until IDeployed feature is received
                                     this.getWindow().destroy();
+                                    this.pollIDeployedFeature(ret['result'], 0);
                                 }
                             }.bind(this),
                             failure: function(response) {
@@ -59,5 +61,35 @@ Ext.define('Onc.controller.NewVmController', {
                 }
             }
         });
+    },
+
+    pollIDeployedFeature: function(result, retryAttempt) {
+        var maxRetryAttempts = 5;
+        var retryPeriod = 3; //seconds
+        if (maxRetryAttempts > retryAttempt) {
+            var url = result.url;
+            console.log(result);
+            Onc.core.Backend.request('GET', url, {
+                success: function(response) {
+                    console.log(response);
+                    var ret = Ext.JSON.decode(response.responseText);
+
+                    if ( ret.features.contains('IDeployed')) {
+                        Ext.MessageBox.alert('Status', 'Node has been successfully created');
+                    } else {
+                        console.log('IDeployed feature not found, retrying');
+                        setTimeout(function () {
+                            this.pollIDeployedFeature(result, retryAttempt+1)}.bind(this), retryPeriod * 1000);
+                    }
+                }.bind(this),
+                failure: function(request, response) {
+                    console.log('Failure from the VM get request, ' + result.url);
+                    setTimeout(function () {
+                        this.pollIDeployedFeature(result, retryAttempt+1)}.bind(this), retryPeriod * 1000);
+                }.bind(this)
+            });
+        } else {
+            Ext.MessageBox.alert('Status', 'Node creation has failed');
+        }
     }
 });
