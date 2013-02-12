@@ -26,8 +26,10 @@ Ext.define('Onc.controller.LoginController', {
             },
             '#logout-button': {
                 click: function() {
-                    Onc.core.Backend.request('GET', 'logout');
-                    this._login();
+                    Onc.core.Backend.request('GET', 'logout')
+                        .success(function(response){
+                            this._login();
+                        }.bind(this));
                 }
             }
         });
@@ -35,6 +37,9 @@ Ext.define('Onc.controller.LoginController', {
 
     _login: function() {
         if (this._viewport){
+            if(this._viewport.getXType() == 'loginwindow'){
+                return; // do nothing
+            }
             this._viewport.destroy();
         }
         Ext.WindowMgr.each(function(w) {
